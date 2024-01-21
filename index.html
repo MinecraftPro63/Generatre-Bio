@@ -18,75 +18,66 @@
   <div id="generatedPage"></div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const generatedPageContainer = document.getElementById('generatedPage');
+    // Define the generatePage function globally
+    async function generatePage() {
+      const pageName = document.getElementById('pageName').value;
 
-      async function generatePage() {
-        const pageName = document.getElementById('pageName').value;
-
-        // Validate if the pageName is not empty
-        if (!pageName) {
-          alert('Please enter a page name.');
-          return;
-        }
-
-        // Generate a unique ID for the page (optional, you can use pageName directly)
-        const pageId = generateRandomString(30);
-
-        // Create a new HTML content
-        const htmlContent = `
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>${pageName}'s Page</title>
-          </head>
-          <body>
-            <h4>${pageName}</h4>
-          </body>
-          </html>
-        `;
-
-        try {
-          // Call the serverless function to handle file writing
-          const response = await fetch('/api/savePage', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              pageId,  // You can use pageName here if you don't want a unique ID
-              htmlContent,
-            }),
-          });
-
-          if (response.ok) {
-            // Display the link to the generated page
-            generatedPageContainer.innerHTML = `<a href="/pages/${pageName}.html" target="_blank">View Your Page</a>`;
-          } else {
-            console.error('Failed to save page.');
-          }
-        } catch (error) {
-          console.error('Error:', error);
-        }
+      // Validate if the pageName is not empty
+      if (!pageName) {
+        alert('Please enter a page name.');
+        return;
       }
 
-      function generateRandomString(length) {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-        for (let i = 0; i < length; i++) {
-          result += characters.charAt(Math.floor(Math.random() * characters.length));
-        }
-        return result;
-      }
+      // Generate a unique ID for the page (optional, you can use pageName directly)
+      const pageId = generateRandomString(30);
 
-      // Attach the generatePage function to the button click event
-      document.getElementById('pageForm').addEventListener('submit', (event) => {
-        event.preventDefault();
-        generatePage();
-      });
-    });
+      // Create a new HTML content
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>${pageName}'s Page</title>
+        </head>
+        <body>
+          <h4>${pageName}</h4>
+        </body>
+        </html>
+      `;
+
+      try {
+        // Call the serverless function to handle file writing
+        const response = await fetch('/api/savePage', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            pageId,  // You can use pageName here if you don't want a unique ID
+            htmlContent,
+          }),
+        });
+
+        if (response.ok) {
+          // Display the link to the generated page
+          document.getElementById('generatedPage').innerHTML = `<a href="/pages/${pageName}.html" target="_blank">View Your Page</a>`;
+        } else {
+          console.error('Failed to save page.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    function generateRandomString(length) {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      return result;
+    }
   </script>
 
 </body>
