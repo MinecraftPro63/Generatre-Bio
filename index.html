@@ -12,14 +12,14 @@
   <form id="pageForm">
     <label for="pageName">Enter Page Name:</label>
     <input type="text" id="pageName" required>
-    <button type="button" onclick="generatePage()">Generate Page</button>
+    <button type="button" onclick="generatepage()">Generate Page</button>
   </form>
 
   <div id="generatedPage"></div>
 
   <script>
     // Define the generatePage function globally
-    async function generatePage() {
+    async function generatepage() {
       const pageName = document.getElementById('pageName').value;
 
       // Validate if the pageName is not empty
