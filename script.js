@@ -1,39 +1,25 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const pageForm = document.getElementById('pageForm');
-  const generatedPageContainer = document.getElementById('generatedPage');
+function generateBio() {
+    const name = document.getElementById('name').value;
+    const age = document.getElementById('age').value;
 
-  pageForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const pageName = document.getElementById('pageName').value;
-
-    // Generate a unique ID for the page
-    const pageId = generateRandomString(30);
-
-    // Create a new HTML content
-    const htmlContent = `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${pageName}'s Page</title>
-      </head>
-      <body>
-        <h4>${pageName}</h4>
-      </body>
-      </html>
-    `;
-
-    // Display the link to the generated page
-    generatedPageContainer.innerHTML = `<a href="/pages/${pageId}" target="_blank">View Your Page</a>`;
-  });
-
-  function generateRandomString(length) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    if (name && age) {
+        const bio = `${name} is ${age} years old. ${generateRandomFact()}`;
+        document.getElementById('bioOutput').textContent = bio;
+    } else {
+        alert('Please enter both name and age.');
     }
-    return result;
-  }
-});
+}
+
+function generateRandomFact() {
+    const facts = [
+        'Enjoys playing musical instruments.',
+        'Loves outdoor activities like hiking.',
+        'Passionate about technology and coding.',
+        'Avid reader of science fiction novels.',
+        'Enthusiastic about learning new things.'
+    ];
+
+    const randomIndex = Math.floor(Math.random() * facts.length);
+    return facts[randomIndex];
+}
+
