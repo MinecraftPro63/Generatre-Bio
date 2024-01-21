@@ -39,23 +39,27 @@
         </html>
       `;
 
-      // Call the serverless function to handle file writing
-      const response = await fetch('/api/savePage', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          pageId,
-          htmlContent,
-        }),
-      });
+      try {
+        // Call the serverless function to handle file writing
+        const response = await fetch('/api/savePage', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            pageId,
+            htmlContent,
+          }),
+        });
 
-      if (response.ok) {
-        // Display the link to the generated page
-        document.getElementById('generatedPage').innerHTML = `<a href="/pages/${pageId}.html" target="_blank">View Your Page</a>`;
-      } else {
-        console.error('Failed to save page.');
+        if (response.ok) {
+          // Display the link to the generated page
+          document.getElementById('generatedPage').innerHTML = `<a href="/pages/${pageId}.html" target="_blank">View Your Page</a>`;
+        } else {
+          console.error('Failed to save page.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
       }
     }
 
