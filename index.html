@@ -44,8 +44,11 @@
           </html>
         `;
 
+        // Save the HTML content to a file in the 'pages' folder
+        saveToFile(`pages/${pageId}.html`, htmlContent);
+
         // Display the link to the generated page
-        generatedPageContainer.innerHTML = `<a href="/pages/${pageId}" target="_blank">View Your Page</a>`;
+        generatedPageContainer.innerHTML = `<a href="/pages/${pageId}.html" target="_blank">View Your Page</a>`;
       });
 
       function generateRandomString(length) {
@@ -56,9 +59,16 @@
         }
         return result;
       }
+
+      function saveToFile(fileName, content) {
+        const blob = new Blob([content], { type: 'text/html' });
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = fileName;
+        link.click();
+      }
     });
   </script>
 
 </body>
 </html>
-
