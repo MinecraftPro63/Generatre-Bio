@@ -12,62 +12,61 @@
   <form id="pageForm">
     <label for="pageName">Enter Page Name:</label>
     <input type="text" id="pageName" required>
-    <button type="submit">Generate Page</button>
+    <button type="button" onclick="generatePage()">Generate Page</button>
   </form>
 
   <div id="generatedPage"></div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const pageForm = document.getElementById('pageForm');
-      const generatedPageContainer = document.getElementById('generatedPage');
+    async function generatePage() {
+      const pageName = document.getElementById('pageName').value;
 
-      pageForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const pageName = document.getElementById('pageName').value;
+      // Generate a unique ID for the page
+      const pageId = generateRandomString(30);
 
-        // Generate a unique ID for the page
-        const pageId = generateRandomString(30);
+      // Create a new HTML content
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>${pageName}'s Page</title>
+        </head>
+        <body>
+          <h4>${pageName}</h4>
+        </body>
+        </html>
+      `;
 
-        // Create a new HTML content
-        const htmlContent = `
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>${pageName}'s Page</title>
-          </head>
-          <body>
-            <h4>${pageName}</h4>
-          </body>
-          </html>
-        `;
-
-        // Save the HTML content to a file in the 'pages' folder
-        saveToFile(`pages/${pageId}.html`, htmlContent);
-
-        // Display the link to the generated page
-        generatedPageContainer.innerHTML = `<a href="/pages/${pageId}.html" target="_blank">View Your Page</a>`;
+      // Call the serverless function to handle file writing
+      const response = await fetch('/api/savePage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          pageId,
+          htmlContent,
+        }),
       });
 
-      function generateRandomString(length) {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-        for (let i = 0; i < length; i++) {
-          result += characters.charAt(Math.floor(Math.random() * characters.length));
-        }
-        return result;
+      if (response.ok) {
+        // Display the link to the generated page
+        document.getElementById('generatedPage').innerHTML = `<a href="/pages/${pageId}.html" target="_blank">View Your Page</a>`;
+      } else {
+        console.error('Failed to save page.');
       }
+    }
 
-      function saveToFile(fileName, content) {
-        const blob = new Blob([content], { type: 'text/html' });
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = fileName;
-        link.click();
+    function generateRandomString(length) {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
       }
-    });
+      return result;
+    }
   </script>
 
 </body>
