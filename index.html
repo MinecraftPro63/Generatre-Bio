@@ -18,59 +18,70 @@
   <div id="generatedPage"></div>
 
   <script>
-    async function generatePage() {
-      const pageName = document.getElementById('pageName').value;
+    document.addEventListener('DOMContentLoaded', () => {
+      const pageForm = document.getElementById('pageForm');
+      const generatedPageContainer = document.getElementById('generatedPage');
 
-      // Generate a unique ID for the page
-      const pageId = generateRandomString(30);
+      async function generatePage() {
+        const pageName = document.getElementById('pageName').value;
 
-      // Create a new HTML content
-      const htmlContent = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>${pageName}'s Page</title>
-        </head>
-        <body>
-          <h4>${pageName}</h4>
-        </body>
-        </html>
-      `;
+        // Generate a unique ID for the page
+        const pageId = generateRandomString(30);
 
-      try {
-        // Call the serverless function to handle file writing
-        const response = await fetch('/api/savePage', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            pageId,
-            htmlContent,
-          }),
-        });
+        // Create a new HTML content
+        const htmlContent = `
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>${pageName}'s Page</title>
+          </head>
+          <body>
+            <h4>${pageName}</h4>
+          </body>
+          </html>
+        `;
 
-        if (response.ok) {
-          // Display the link to the generated page
-          document.getElementById('generatedPage').innerHTML = `<a href="/pages/${pageId}.html" target="_blank">View Your Page</a>`;
-        } else {
-          console.error('Failed to save page.');
+        try {
+          // Call the serverless function to handle file writing
+          const response = await fetch('/api/savePage', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              pageId,
+              htmlContent,
+            }),
+          });
+
+          if (response.ok) {
+            // Display the link to the generated page
+            generatedPageContainer.innerHTML = `<a href="/pages/${pageId}.html" target="_blank">View Your Page</a>`;
+          } else {
+            console.error('Failed to save page.');
+          }
+        } catch (error) {
+          console.error('Error:', error);
         }
-      } catch (error) {
-        console.error('Error:', error);
       }
-    }
 
-    function generateRandomString(length) {
-      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      let result = '';
-      for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * characters.length));
+      function generateRandomString(length) {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < length; i++) {
+          result += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return result;
       }
-      return result;
-    }
+
+      // Attach the generatePage function to the button click event
+      document.getElementById('pageForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        generatePage();
+      });
+    });
   </script>
 
 </body>
