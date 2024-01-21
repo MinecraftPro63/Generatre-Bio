@@ -1,22 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio Generator</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Generator</title>
 </head>
 <body>
-    <h1>Bio Generator</h1>
-    <label for="name">Name:</label>
-    <input type="text" id="name" placeholder="Enter your name">
-    <br>
-    <label for="age">Age:</label>
-    <input type="number" id="age" placeholder="Enter your age">
-    <br>
-    <button onclick="generateBio()">Generate Bio</button>
-    <br>
-    <p id="bioOutput"></p>
 
-    <script src="script.js"></script>
+  <h1>Page Generator</h1>
+
+  <form id="pageForm">
+    <label for="pageName">Enter Page Name:</label>
+    <input type="text" id="pageName" required>
+    <button type="submit">Generate Page</button>
+  </form>
+
+  <div id="generatedPage"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const pageForm = document.getElementById('pageForm');
+      const generatedPageContainer = document.getElementById('generatedPage');
+
+      pageForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const pageName = document.getElementById('pageName').value;
+
+        // Generate a unique ID for the page
+        const pageId = generateRandomString(30);
+
+        // Create a new HTML content
+        const htmlContent = `
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>${pageName}'s Page</title>
+          </head>
+          <body>
+            <h4>${pageName}</h4>
+          </body>
+          </html>
+        `;
+
+        // Display the link to the generated page
+        generatedPageContainer.innerHTML = `<a href="/pages/${pageId}" target="_blank">View Your Page</a>`;
+      });
+
+      function generateRandomString(length) {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < length; i++) {
+          result += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return result;
+      }
+    });
+  </script>
+
 </body>
 </html>
