@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page Generator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bio Generator</title>
 </head>
 <body>
+    <h1>Bio Generator</h1>
+    <label for="name">Name:</label>
+    <input type="text" id="name" placeholder="Enter your name">
+    <br>
+    <label for="age">Age:</label>
+    <input type="number" id="age" placeholder="Enter your age">
+    <br>
+    <button onclick="generateBio()">Generate Bio</button>
+    <br>
+    <p id="bioOutput"></p>
 
-  <form id="pageForm">
-    <label for="pageName">Page Name:</label>
-    <input type="text" id="pageName" required>
-    <button type="submit">Generate Page</button>
-  </form>
-
-  <div id="generatedPage"></div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
