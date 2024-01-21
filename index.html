@@ -19,14 +19,18 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const pageForm = document.getElementById('pageForm');
       const generatedPageContainer = document.getElementById('generatedPage');
 
-      // Define the generatePage function
       async function generatePage() {
         const pageName = document.getElementById('pageName').value;
 
-        // Generate a unique ID for the page
+        // Validate if the pageName is not empty
+        if (!pageName) {
+          alert('Please enter a page name.');
+          return;
+        }
+
+        // Generate a unique ID for the page (optional, you can use pageName directly)
         const pageId = generateRandomString(30);
 
         // Create a new HTML content
@@ -52,14 +56,14 @@
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              pageId,
+              pageId,  // You can use pageName here if you don't want a unique ID
               htmlContent,
             }),
           });
 
           if (response.ok) {
             // Display the link to the generated page
-            generatedPageContainer.innerHTML = `<a href="/pages/${pageId}.html" target="_blank">View Your Page</a>`;
+            generatedPageContainer.innerHTML = `<a href="/pages/${pageName}.html" target="_blank">View Your Page</a>`;
           } else {
             console.error('Failed to save page.');
           }
